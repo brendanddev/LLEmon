@@ -1,13 +1,15 @@
 
 # Credit to Andrej Karpathy for the initial version of this script
 # https://www.youtube.com/watch?v=kCc8FmEb1nY
+
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 # Hyperparameters
 BATCH_SIZE = 32
-BLOCK_SIZE = 0
+BLOCK_SIZE = 8
 MAX_ITERS = 4000
 EVAL_INTERNAL = 300
 LEARNING_RATE = 1e-3
@@ -16,7 +18,7 @@ EVAL_ITERS = 300
 
 torch.manual_seed(1337)
 
-with open('data/trainingv1.txt', 'r', encoding='utf-8') as f:
+with open('data/trainingv2.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
 chars = sorted(list(set(text)))
@@ -70,7 +72,7 @@ class BigramLanguageModel(nn.Module):
         logits = self.token_embedding_table(idx)  # (B, T, C)
         
         if targets is None:
-            loss = None
+            return logits, None
         else:
             B, T, C = logits.shape
             logits = logits.view(B*T, C)
@@ -104,9 +106,9 @@ optimizer = torch.optim.AdamW(m.parameters(), lr=LEARNING_RATE)
 for iters in range(MAX_ITERS):
     
     if iters % EVAL_INTERNAL == 0:
-        losses = generate_loss()
-        print(f"Iteration {iters}, Loss: {losses.item()}")
-        
+        losses = estimate_loss()
+        print(f"Iteration {iters}, Train Loss: {losses['train']:.4f}, Val Loss: {losses['val']:.4f}")        
+    
     # Sample a batch of data
     xb, yb = get_batch('train')
     
