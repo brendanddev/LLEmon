@@ -6,6 +6,8 @@ Defines text processing related utilities
 Brendan Dileo, August 2025
 """
 
+import re
+
 def load_text(file_path):
     """ Load text from a file and return its content """
     try:
@@ -20,4 +22,9 @@ def load_text(file_path):
         return None
 
 def clean_text(text):
-    
+    """ Clean the text by removing HTML tags, extra whitespace, emails, and URLs """
+    cleaned_text = re.sub(r'<.*?>', '', text)
+    cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+    cleaned_text = re.sub(r'http\S+|www\S+', '', cleaned_text)
+    cleaned_text = re.sub(r'\S+@\S+', '', cleaned_text)
+    return cleaned_text.strip()
