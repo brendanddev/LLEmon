@@ -23,7 +23,7 @@ model.config.pad_token_id = tokenizer.pad_token_id
 
 # Prompt for text generation
 prompt = "Once upon a time"
-inputs = tokenizer(prompt, return_tensors="pt")
+inputs = tokenizer(prompt, return_tensors="pt", padding=True)
 
 # Generate text
 outputs = model.generate(
