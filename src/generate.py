@@ -21,18 +21,27 @@ model = GPT2LMHeadModel.from_pretrained(model_dir)
 tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.pad_token_id
 
-# Prompt for text generation
-prompt = "Once upon a time"
-inputs = tokenizer(prompt, return_tensors="pt", padding=True)
+## Generate text using the model
 
-# Generate text
-outputs = model.generate(
-    inputs["input_ids"],
-    max_length=100,
-    do_sample=True,
-    temperature=0.7,
-    top_p=0.9,
-    num_return_sequences=1
-)
-
-print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+while True:
+    prompt = input("You: ")
+    if prompt.lower().strip() in {"quit", "exit", "q"}:
+        print("Exiting generation...")
+        break
+    
+    # Encode input
+    inputs = tokenizer(prompt, return_tensors="pt", padding=True)
+    
+    # Generate response
+    outputs = model.generate(
+        inputs["input_ids"],
+        max_length=150,
+        do_sample=True,
+        temperature=0.7,
+        top_p=0.9,
+        num_return_sequences=1
+    )
+    
+    # Decode and print
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    print(f"Model: {response}\n")
