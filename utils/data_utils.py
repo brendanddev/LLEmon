@@ -29,3 +29,18 @@ def count_char_frequency(texts):
     for line in texts:
         counter.update(line.strip())
     return counter
+
+def load_dataset(file_path):
+    """ Loads a text dataset from a file and returns a list of non-empty lines """
+    with open(file_path, "r", encoding="utf-8") as f:
+        texts = [line.strip() for line in f if line.strip()]
+    return texts
+
+if __name__ == "__main__":
+    file_path = "data/training.txt"
+    texts = load_dataset(file_path)
+    
+    print(f"Lines: {count_lines(texts)}")
+    print(f"Characters: {count_chars(texts)}")
+    print(f"Unique characters: {count_unique_chars(texts)}")
+    print("Top 10 most common characters:", count_char_frequency(texts).most_common(10))
