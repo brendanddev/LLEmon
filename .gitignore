@@ -1,4 +1,8 @@
 
+# Models
+final/
+checkpoint-*
+
 # Training Data 
 training.txt
 trainingv1.txt
