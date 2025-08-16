@@ -8,6 +8,11 @@ Brendan Dileo, August 2025
 
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArguments
 from datasets import Dataset 
+from pathlib import Path
+
+# Project paths
+project_root = Path(__file__).parent.parent
+output_dir = project_root / "models"
 
 # Load text dataset
 with open("data/training.txt", "r", encoding="utf-8") as file:
@@ -33,7 +38,7 @@ tokenized_dataset = dataset.map(tokenize, batched=True)
 
 # Set training arguments
 training_args = TrainingArguments(
-    output_dir="../models",
+    output_dir=output_dir,
     num_train_epochs=1,
     per_device_train_batch_size=2,
     save_strategy="epoch",
@@ -53,3 +58,8 @@ trainer = Trainer(
 
 # Start training the model
 trainer.train()
+
+# Save final model & tokenizer
+final_dir = output_dir / "final"
+trainer.save_model(final_dir)
+tokenizer.save_pretrained(final_dir)
