@@ -22,3 +22,21 @@ def clean_text(text):
     text = remove_wiki_refs(text)
     text = remove_multiple_whitespace(text)
     return text
+
+if __name__ == "__main__":
+    print("Paste your text below. Finish with an empty line to end:")
+    lines = []
+    while True:
+        try:
+            line = input()
+        except EOFError:
+            break
+        if line.strip() == "":
+            break
+        lines.append(line)
+    
+    input_text = "\n".join(lines)
+    cleaned = clean_text(input_text)
+    
+    print("\nCleaned text:\n")
+    print(cleaned)
