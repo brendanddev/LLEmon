@@ -10,7 +10,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArgume
 from datasets import Dataset 
 
 # Load text dataset
-with open("./data/", "r", encoding="utf-8") as file:
+with open("data/training.txt", "r", encoding="utf-8") as file:
     texts = [line.strip() for line in file if line.strip()]
 
 # Create a dataset from the texts
@@ -20,9 +20,15 @@ dataset = Dataset.from_dict({"text": texts})
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 model = GPT2LMHeadModel.from_pretrained("gpt2")
 
+tokenizer.pad_token = tokenizer.eos_token
+model.config.pad_token_id = tokenizer.pad_token_id
+
 # Tokenize the data
 def tokenize(batch):
-    return tokenizer(batch["text"], truncation=True, padding="max_length", max_length=128)
+    tokens = tokenizer(batch["text"], truncation=True, padding="max_length", max_length=128)
+    tokens["labels"] = tokens["input_ids"].copy()
+    return tokens
+
 tokenized_dataset = dataset.map(tokenize, batched=True)
 
 # Set training arguments
@@ -32,6 +38,10 @@ training_args = TrainingArguments(
     per_device_train_batch_size=2,
     save_strategy="epoch",
     logging_steps=10,
+    report_to="none",
+    remove_unused_columns=False,
+    load_best_model_at_end=False,
+    logging_dir="../logs",
 )
 
 # Initialize Trainer
