@@ -8,8 +8,8 @@ Brendan Dileo, August 2025
 
 import sys
 from pathlib import Path
-import train
-import generate
+from train import Trainer
+from generate import Generator
 from utils import data_utils, token_utils
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -21,7 +21,7 @@ def main():
     print("You can train a model, generate text, or analyze data.")
     
     while True:
-        print("Options:")
+        print("\nOptions:")
         print("1. Train a model")
         print("2. Generate text using a trained model")
         print("3. Analyze text data")
@@ -31,19 +31,30 @@ def main():
         
         if choice == '1':
             print("Starting training...")
-            train.train_model()
+            trainer = Trainer(
+                dataset_path="data/training.txt",
+                model_name="gpt2",
+                output_dir="models"
+            )
+            trainer.train(num_epochs=1, batch_size=2)
+
         elif choice == '2':
             print("Starting text generation...")
-            generate.generate_text()
+            generator = Generator(model_dir="models/final")
+            generator.generate_text()
+
         elif choice == '3':
             print("Analyzing text data...")
             texts = data_utils.load_dataset("data/training.txt")
             token_utils.run_token_analysis("data/training.txt")
+
         elif choice == '4':
             print("Exiting the system. Goodbye!")
             break
+
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")
+
 
 if __name__ == "__main__":
     main()
