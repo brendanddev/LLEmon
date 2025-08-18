@@ -30,7 +30,7 @@ class Trainer:
         return Dataset.from_dict({"text": texts})
 
     def tokenize(self, batch):
-        tokens = self.tokenizer(batch["text"], truncation=True, padding="max_length", max_length=128)
+        tokens = self.tokenizer(batch["text"], truncation=True, padding="max_length", max_length=256)
         tokens["labels"] = tokens["input_ids"].copy()
         return tokens
     

@@ -36,7 +36,7 @@ def main():
                 model_name="gpt2",
                 output_dir="models"
             )
-            trainer.train(num_epochs=1, batch_size=2)
+            trainer.train(num_epochs=4, batch_size=2)
 
         elif choice == '2':
             print("Starting text generation...")
