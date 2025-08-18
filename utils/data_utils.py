@@ -36,11 +36,10 @@ def load_dataset(file_path):
         texts = [line.strip() for line in f if line.strip()]
     return texts
 
-if __name__ == "__main__":
-    file_path = "data/training.txt"
+def run_analysis(file_path="data/training.txt"):
     texts = load_dataset(file_path)
-    
     print(f"Lines: {count_lines(texts)}")
     print(f"Characters: {count_chars(texts)}")
     print(f"Unique characters: {count_unique_chars(texts)}")
     print("Top 10 most common characters:", count_char_frequency(texts).most_common(10))
+    return texts

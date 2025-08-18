@@ -6,7 +6,6 @@ Utility functions for analyzing token statistics in a text dataset.
 Brendan Dileo, August 2025
 """
 
-
 from transformers import GPT2Tokenizer
 from collections import Counter
 
@@ -41,9 +40,10 @@ def compute_token_stats(texts):
         "token_freq": token_counter
     }
 
-
-if __name__ == "__main__":
-    with open("data/training.txt", "r", encoding="utf-8") as f:
+def run_token_analysis(file_path="data/training.txt"):
+    """ Runs token analysis on a text dataset file. """
+    with open(file_path, "r", encoding="utf-8") as f:
         texts = [line.strip() for line in f if line.strip()]
 
     stats = compute_token_stats(texts)
+    return stats
