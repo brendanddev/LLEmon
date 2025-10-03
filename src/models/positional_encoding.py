@@ -35,4 +35,5 @@ class PositionalEncoding(nn.Module):
         # Save as a buffer so its not a model parameter
         self.register_buffer('pe', pe)
     
-    def forward():
+    def forward(self, x):
+        return x + self.pe[:, :x.size(1)]
