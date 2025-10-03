@@ -6,31 +6,27 @@ Main entry point for the LLEmon text generation system.
 Brendan Dileo, August 2025
 """
 
-from models.transformer import Transformer
 from tokenizer.bpetokenizer import BPETokenizer
-import torch
 
 def main():
+    with open("data/training.txt", "r", encoding="utf-8") as f:
+        text = f.read()
+    text_sample = text[:5000]
+
+    print("Loaded text length:", len(text_sample))
+
+    # Initialize tokenizer
+    tokenizer = BPETokenizer(num_merges=50)
+    tokenizer.fit(text_sample)
     
-    text = "Hello, world!"
+    print("Fitting done.")
+    print("Vocabulary size:", len(tokenizer.vocab))
     
-    # Build tokenizer
-    tokenizer = BPETokenizer(num_merges=100)
-    tokenizer.fit(text)
-    
-    # Encode text into token IDs
-    ids = tokenizer.encode(text)
-    
-    # Convert to tensor with batch dimension
-    x = torch.tensor([ids], dtype=torch.long)
-    
-    # Initialize model
-    model = Transformer(vocab_size=len(tokenizer.vocab))
-    
-    # Forward pass
-    out = model(x)
-    
-    print(out.shape)  # Should be (1, sequence_length, vocab_size)
+    prompt = "Once upon a time"
+    encoded = tokenizer.encode(prompt)
+    print("Encoded prompt:", encoded)
+    decoded = tokenizer.decode(encoded)
+    print("Decoded prompt:", decoded)
 
 if __name__ == "__main__":
     main()
