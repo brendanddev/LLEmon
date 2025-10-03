@@ -10,7 +10,7 @@ from collections import Counter, defaultdict
 
 class BPETokenizer:
     
-    def __init__(self, num_merges=1000):
+    def __init__(self, num_merges=250):
         self.num_merges = num_merges
         self.vocab = set()
         self.merges = []

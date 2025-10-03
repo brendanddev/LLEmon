@@ -11,7 +11,6 @@ from tokenizer.bpetokenizer import BPETokenizer
 def load_data(path="data/training.txt", train_split=0.9, block_size=256, batch_size=32, verbose=False):
     with open(path, "r", encoding="utf-8") as file:
         text = file.read()
-
     print("Loaded text length:", len(text))  
     
     # Build tokenizer and encode text
