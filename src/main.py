@@ -7,7 +7,7 @@ Brendan Dileo, August 2025
 """
 
 from models.transformer import Transformer
-from tokenizer.chartokenizer import CharTokenizer
+from tokenizer.chartokenizer import BPETokenizer
 import torch
 
 def main():
@@ -15,7 +15,8 @@ def main():
     text = "Hello, world!"
     
     # Build tokenizer
-    tokenizer = CharTokenizer(text)
+    tokenizer = BPETokenizer(num_merges=100)
+    tokenizer.fit(text)
     
     # Encode text into token IDs
     ids = tokenizer.encode(text)
@@ -24,7 +25,7 @@ def main():
     x = torch.tensor([ids], dtype=torch.long)
     
     # Initialize model
-    model = Transformer(vocab_size=tokenizer.vocab_size)
+    model = Transformer(vocab_size=len(tokenizer.vocab))
     
     # Forward pass
     out = model(x)
