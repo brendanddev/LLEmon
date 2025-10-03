@@ -31,7 +31,7 @@ def sample():
     tokenizer = CharTokenizer("".join(vocab))
     
     # Initialize model and load state
-    model = Transformer(vocab_size=len(vocab), d_model=128, N=2, heads=8, d_ff=512, max_len=64).to(device)
+    model = Transformer(vocab_size=len(vocab), d_model=128, N=2, heads=8, d_ff=512, max_len=256).to(device)
     model.load_state_dict(checkpoint["model_state"])
     
     # Generate sample text

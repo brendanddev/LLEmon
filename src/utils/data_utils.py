@@ -8,7 +8,7 @@ Defines utility functions for loading and batching text data for training.
 import torch
 from tokenizer.chartokenizer import CharTokenizer
     
-def load_data(path="", train_split=0.9, block_size=64, batch_size=32):
+def load_data(path="data/trainingv2.txt", train_split=0.9, block_size=256, batch_size=32):
     with open(path, "r", encoding="utf-8") as file:
         text = file.read()
         
@@ -30,3 +30,4 @@ def get_batch(data, block_size, batch_size, device="cpu"):
     x = torch.stack([data[i:i+block_size] for i in ix])
     y = torch.stack([data[i+1:i+block_size+1] for i in ix])
     return x.to(device), y.to(device)
+
