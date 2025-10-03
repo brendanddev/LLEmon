@@ -12,7 +12,7 @@ from models.transformer import Transformer
 from utils.data_utils import load_data, get_batch
 
 def train():
-    
+
     # Training settings
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     epochs = 1000
@@ -23,8 +23,9 @@ def train():
     tokenizer, train_data, val_data, block_size, batch_size = load_data(block_size=256, verbose=True)
     
     # Initialize model
+    vocab_size = len(tokenizer.vocab)
     model = Transformer(
-        vocab_size=tokenizer.vocab_size, 
+        vocab_size=vocab_size, 
         d_model=128, 
         N=2, 
         heads=8, 
@@ -62,7 +63,7 @@ def train():
     # Save model and tokenizer
     torch.save({
         "model_state": model.state_dict(),
-        "vocab": tokenizer.chars,
+        "vocab": list(tokenizer.vocab),
     }, "checkpoints/model.pth")
     print("Model and tokenizer saved to model.pth")
 
