@@ -2,6 +2,7 @@
 """ 
 data_utils.py
 
+Defines utility functions for loading and batching text data for training.
 """
 
 import torch
@@ -23,5 +24,9 @@ def load_data(path="", train_split=0.9, block_size=64, batch_size=32):
     return tokenizer, train_data, val_data, block_size, batch_size
     
 
-def get_batch():
-    pass
+def get_batch(data, block_size, batch_size, device="cpu"):
+    # Sample random indices
+    ix = torch.randint(len(data) - block_size - 1, (batch_size,))
+    x = torch.stack([data[i:i+block_size] for i in ix])
+    y = torch.stack([data[i+1:i+block_size+1] for i in ix])
+    return x.to(device), y.to(device)
