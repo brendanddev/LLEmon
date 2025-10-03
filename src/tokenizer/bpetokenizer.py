@@ -6,7 +6,7 @@ A basic implementation of a Byte Pair Encoding (BPE) tokenizer.
 """
 
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 
 class BPETokenizer:
     
@@ -30,13 +30,40 @@ class BPETokenizer:
     # Performs one merge operation on the vocabulary by replacing all occurrences of a given pair with the merged token
     def merge_vocab(self, pair, vocab):
         new_vocab = {}
+        
+        # Regex to match the pair as a full unit (not part of a larger token)
         bigram = re.escape(' '.join(pair))
         pattern = re.compile(r'(?<!\S)' + bigram + r'(?!\S)')
+        
         for word in vocab:
+            # Replace all instances of the bigram with the merged token
             new_word = pattern.sub(''.join(pair), word)
             new_vocab[new_word] = vocab[word]
         return new_vocab
 
+    # Trains the tokenizer on input text by performing a series of merges
+    def fit(self, text):
+        # Build base vocab from words with end marker
+        words = text.strip().split()
+        vocab = defaultdict(int)
+        for w in words:
+            # Add end of word token
+            vocab[' '.join(list(w)) + " </w>"] += 1
 
-    
-    
+        # Perform byte pair encoding merges
+        for _ in range(self.num_merges):
+            pairs = self.get_stats(vocab)
+            if not pairs:
+                break
+            best = max(pairs, key=pairs.get)
+            vocab = self.merge_vocab(best, vocab)
+            self.merges.append(best)
+        
+        # Collect final tokens in vocabulary
+        self.vocab = set()
+        for word in vocab:
+            self.vocab.update(word.split())
+        
+        # Build id mappings
+        self.token2id = {tok: i for i, tok in enumerate(sorted(self.vocab))}
+        self.id2token = {i: tok for tok, i in self.token2id.items()}
