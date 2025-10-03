@@ -92,3 +92,8 @@ class BPETokenizer:
             # Convert subwords to IDs, falling back to <unk> if not found
             tokens.extend([self.token2id.get(sw, self.token2id.get("<unk>", 0)) for sw in subwords])
         return tokens
+
+    # Decodes a sequence of token IDs back into text
+    def decode(self, ids):
+        tokens = [self.id2token[i] for i in ids]
+        return "".join(tokens).replace("</w>", " ").strip()
