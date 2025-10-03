@@ -72,7 +72,7 @@ class BPETokenizer:
     def tokenize(self, word):
         chars = list(word) + ['</w>']
         i = 0
-        while i < len(chars) - 1:
+        while i < len(chars):
             pair = (chars[i], chars[i+1])
             if pair in self.merges:
                 # Merge if this pair was learned while training
