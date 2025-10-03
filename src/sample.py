@@ -27,11 +27,14 @@ def sample():
     
     # Load checkpoint
     checkpoint = torch.load("checkpoints/model.pth", map_location=device)
-    
+
+    # Reconstruct tokenizer from checkpoint
     tokenizer = BPETokenizer(num_merges=1000)
-    with open("data/training.txt", "r", encoding="utf-8") as f:
-        text = f.read()
-    tokenizer.fit(text)
+    tokenizer.vocab = set(checkpoint["vocab"])
+    
+    # Rebuild ID mappings
+    tokenizer.token2id = {tok:i for i, tok in enumerate(sorted(tokenizer.vocab))}
+    tokenizer.id2token = {i:tok for tok,i in tokenizer.token2id.items()}
     
     # Initialize model and load state
     model = Transformer(
