@@ -8,7 +8,7 @@ Defines utility functions for loading and batching text data for training.
 import torch
 from tokenizer.chartokenizer import CharTokenizer
     
-def load_data(path="data/trainingv2.txt", train_split=0.9, block_size=256, batch_size=32):
+def load_data(path="data/training.txt", train_split=0.9, block_size=256, batch_size=32, verbose=False):
     with open(path, "r", encoding="utf-8") as file:
         text = file.read()
         
@@ -21,6 +21,9 @@ def load_data(path="data/trainingv2.txt", train_split=0.9, block_size=256, batch
     train_data = data[:split_idx]
     val_data = data[split_idx:]
     
+    if verbose:
+        print_stats(tokenizer, train_data, val_data, block_size, batch_size)
+    
     return tokenizer, train_data, val_data, block_size, batch_size
     
 
@@ -31,3 +34,10 @@ def get_batch(data, block_size, batch_size, device="cpu"):
     y = torch.stack([data[i+1:i+block_size+1] for i in ix])
     return x.to(device), y.to(device)
 
+def print_stats(tokenizer, train_data, val_data, block_size, batch_size):
+    print(f"Total characters in dataset: {len(train_data) + len(val_data)}")
+    print(f"Unique characters (vocab size): {tokenizer.vocab_size}")
+    print(f"Training split: {len(train_data)} characters")
+    print(f"Validation split: {len(val_data)} characters")
+    print(f"Block size: {block_size}")
+    print(f"Batch size: {batch_size}")

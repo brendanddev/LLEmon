@@ -20,7 +20,7 @@ def train():
     eval_interval = 100
     
     # Load data
-    tokenizer, train_data, val_data, block_size, batch_size = load_data(block_size=256)
+    tokenizer, train_data, val_data, block_size, batch_size = load_data(block_size=256, verbose=True)
     
     # Initialize model
     model = Transformer(
