@@ -11,10 +11,13 @@ from tokenizer.bpetokenizer import BPETokenizer
 def load_data(path="data/training.txt", train_split=0.9, block_size=256, batch_size=32, verbose=False):
     with open(path, "r", encoding="utf-8") as file:
         text = file.read()
-        
+
+    print("Loaded text length:", len(text))  
+    
     # Build tokenizer and encode text
     tokenizer = BPETokenizer(num_merges=1000)
     tokenizer.fit(text)
+    print("Tokenizer vocab:", tokenizer.vocab)  
 
     # Encode entire text dataset into token IDs
     data = torch.tensor(tokenizer.encode(text), dtype=torch.long)
@@ -38,9 +41,10 @@ def get_batch(data, block_size, batch_size, device="cpu"):
     return x.to(device), y.to(device)
 
 def print_stats(tokenizer, train_data, val_data, block_size, batch_size):
-    print(f"Total characters in dataset: {len(train_data) + len(val_data)}")
-    print(f"Unique characters (vocab size): {tokenizer.vocab_size}")
-    print(f"Training split: {len(train_data)} characters")
-    print(f"Validation split: {len(val_data)} characters")
+    vocab_size = getattr(tokenizer, 'vocab_size', len(tokenizer.vocab))
+    print(f"Total tokens in dataset: {len(train_data) + len(val_data)}")
+    print(f"Unique tokens (vocab size): {vocab_size}")
+    print(f"Training split: {len(train_data)} tokens")
+    print(f"Validation split: {len(val_data)} tokens")
     print(f"Block size: {block_size}")
     print(f"Batch size: {batch_size}")
