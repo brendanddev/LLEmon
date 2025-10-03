@@ -81,3 +81,14 @@ class BPETokenizer:
                 i += 1
         # Drop the end of word token for output
         return chars[:-1]
+
+    # Encodes input text into a sequence of token IDs
+    def encode(self, text):
+        tokens = []
+        for word in text.strip().split():
+            # Tokenize word into subwords
+            subwords = self.tokenize(word)
+            
+            # Convert subwords to IDs, falling back to <unk> if not found
+            tokens.extend([self.token2id.get(sw, self.token2id.get("<unk>", 0)) for sw in subwords])
+        return tokens
