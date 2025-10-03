@@ -22,3 +22,21 @@ def generate(model, tokenizer, prompt="Hello", length=100, device="cpu"):
     
     return tokenizer.decode(x[0].tolist())
 
+def sample():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
+    # Load checkpoint
+    checkpoint = torch.load("model.pth", map_location=device)
+    vocab = checkpoint['vocab']
+    tokenizer = CharTokenizer("".join(vocab))
+    
+    # Initialize model and load state
+    model = Transformer(vocab_size=len(vocab), d_model=128, N=2, heads=8, d_ff=512, max_len=64).to(device)
+    model.load_state_dict(checkpoint["model_state"])
+    
+    # Generate sample text
+    text = generate(model, tokenizer, prompt="Once upon a time", length=200, device=device)
+    print(text)
+
+if __name__ == "__main__":
+    sample()
