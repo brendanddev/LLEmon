@@ -67,3 +67,16 @@ class BPETokenizer:
         # Build id mappings
         self.token2id = {tok: i for i, tok in enumerate(sorted(self.vocab))}
         self.id2token = {i: tok for tok, i in self.token2id.items()}
+    
+    # Tokenizes a single word into subword tokens using the learned merges
+    def tokenize(self, word):
+        chars = list(word) + ['</w>']
+        i = 0
+        while i < len(chars) - 1:
+            pair = (chars[i], chars[i+1])
+            if pair in self.merges:
+                # Merge if this pair was learned while training
+                chars[i:i+2] = [''.join(pair)]
+            else:
+                i += 1
+        return chars
