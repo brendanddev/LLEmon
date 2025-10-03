@@ -7,7 +7,7 @@ Brendan Dileo, August 2025
 """
 
 from models.transformer import Transformer
-from tokenizer.chartokenizer import BPETokenizer
+from tokenizer.bpetokenizer import BPETokenizer
 import torch
 
 def main():
