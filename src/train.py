@@ -63,7 +63,7 @@ def train():
     torch.save({
         "model_state": model.state_dict(),
         "vocab": tokenizer.chars,
-    }, "model.pth")
+    }, "checkpoints/model.pth")
     print("Model and tokenizer saved to model.pth")
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ def sample():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
     # Load checkpoint
-    checkpoint = torch.load("model.pth", map_location=device)
+    checkpoint = torch.load("checkpoints/model.pth", map_location=device)
     vocab = checkpoint['vocab']
     tokenizer = CharTokenizer("".join(vocab))
     
