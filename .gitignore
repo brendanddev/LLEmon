@@ -3,6 +3,9 @@
 final/
 checkpoint-*
 
+# Checkpoints
+checkpoints/
+
 # Training Data 
 training.txt
 trainingv1.txt
