@@ -1,5 +1,7 @@
 
+use std::collections::HashSet;
 use std::collections::HashMap;
+use regex::Regex;
 
 
 /// A rust implementation of a Byte Pair Encoding (BPE) tokenizer
@@ -32,7 +34,7 @@ impl BpeTokenizer {
     }
 
     /// Train the BPE tokenizer on the input text
-    pub fn fit() {
+    pub fn fit(&mut self, text: &str) {
         // Build initial vocab from words with end of word token
         let mut vocab: HashMap<String, usize> = HashMap::new();
         for word in text.split_whitespace() {
@@ -110,9 +112,22 @@ impl BpeTokenizer {
         chars
     }
 
-    pub fn encode() { }
+    /// Encode a string into token IDs
+    pub fn encode(&self, text: &str) -> Vec<usize> {
+        let mut tokens = Vec::new();
+        for word in text.split_whitespace() {
+            let subwords = self.tokenize(word);
+            for sw in subwords {
+                // Default to 0 if token not found
+                tokens.push(*self.token2id.get(&sw).unwrap_or(&0));
+            }
+        }
+        tokens
+    }
 
-    pub fn decode() { }
+    /// Decode a sequence of token IDs back into a string
+    pub fn decode(&self, ids: Vec<usize>) -> String {
+    }
 
 
 
