@@ -11,6 +11,9 @@ training.txt
 trainingv1.txt
 trainingv2.txt
 
+# Rust build files
+src/rust_bpe/target/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
