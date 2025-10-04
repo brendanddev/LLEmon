@@ -90,7 +90,25 @@ impl BpeTokenizer {
         new_vocab
     }
 
-    pub fn tokenize() { }
+    /// Tokenize a single word into subword using learned merges
+    pub fn tokenize(&self, word: &str) -> Vec<String> {
+        let mut chars: Vec<String> = word.chars().map(|c| c.to_string()).collect();
+        chars.push("</w>".to_string());
+        let mut i = 0;
+
+        while i < chars.len() - 1 {
+            let pair = (chars[i].clone(), chars[i + 1].clone());
+            if self.merges.contains(&pair) {
+                chars.splice(i..=i+1, [format!("{}{}", pair.0, pair.1)]);
+            } else {
+                i += 1;
+            }
+        }
+        
+        // Remove end of word token before returning
+        chars.pop();
+        chars
+    }
 
     pub fn encode() { }
 
