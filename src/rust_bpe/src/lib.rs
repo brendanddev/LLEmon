@@ -65,8 +65,18 @@ impl BpeTokenizer {
         self.id2token = self.token2id.iter().map(|(k, &v)| (v, k.clone())).collect();
     }
     
-
-    pub fn get_stats() { }
+    /// Count frequency of all adjacent pairs (bigrams) in the vocabulary
+    fn get_stats(vocab: &HashMap<String, usize>) -> HashMap<(String, String), usize> {
+        let mut pairs: HashMap<(String, String), usize> = HashMap::new();
+        for (word, freq) in vocab {
+            let symbols: Vec<&str> = word.split_whitespace().collect();
+            for i in 0..symbols.len() - 1 {
+                let pair = (symbols[i].to_string(), symbols[i + 1].to_string());
+                *pairs.entry(pair).or_insert(0) += freq;
+            }
+        }
+        pairs
+    }
     
     fn merge_vocab() { }
 
