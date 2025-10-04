@@ -127,6 +127,13 @@ impl BpeTokenizer {
 
     /// Decode a sequence of token IDs back into a string
     pub fn decode(&self, ids: Vec<usize>) -> String {
+        ids.iter()
+            .map(|id| self.id2token.get(id).unwrap_or(&"<unk>".to_string()).clone())
+            .collect::<Vec<String>>()
+            .join("")
+            .replace("</w>", " ")
+            .trim()
+            .to_string()
     }
 
 
