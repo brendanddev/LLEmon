@@ -12,7 +12,7 @@ trainingv1.txt
 trainingv2.txt
 
 # Rust build files
-src/rust_bpe/target/
+src/rust_bpe_tokenizer/target/
 
 # Token and vocab files
 vocab.json
