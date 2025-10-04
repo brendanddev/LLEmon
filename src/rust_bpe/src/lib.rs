@@ -1,8 +1,10 @@
 
+use std::fs::File;
+use std::io::Write;
+use serde_json::to_string;
 
 use std::collections::HashSet;
 use std::collections::HashMap;
-
 
 
 /// A rust implementation of a Byte Pair Encoding (BPE) tokenizer
@@ -21,8 +23,8 @@ pub struct BpeTokenizer {
 }
 
 
-
 impl BpeTokenizer {
+    
     // Constructs a new BpeTokenizer instance
     pub fn new(num_merges: usize) -> Self {
         BpeTokenizer {
@@ -160,4 +162,18 @@ impl BpeTokenizer {
             .trim()
             .to_string()
     }
+}
+
+/// Save the learned vocabulary to a JSON file
+pub fn save_vocab(tokenizer: &BpeTokenizer, path: &str) {
+    let json = to_string(&tokenizer.token2id).unwrap();
+    let mut file = File::create(path).unwrap();
+    file.write_all(json.as_bytes()).unwrap();
+}
+
+/// Save tokenized text (list of token IDs) to a JSON file
+pub fn save_tokenized_text(tokens: &Vec<usize>, path: &str) {
+    let json = to_string(tokens).unwrap();
+    let mut file = File::create(path).unwrap();
+    file.write_all(json.as_bytes()).unwrap();
 }
