@@ -1,12 +1,19 @@
 
 use rust_bpe::BpeTokenizer;
+use std::fs;
+use rust_bpe::{save_vocab, save_tokenized_text};
 
-/// Test for the BPE tokenizer
 fn main() {
-    let text = "hello world hello byte pair encoding";
-    let mut tokenizer = BpeTokenizer::new(50);
-    tokenizer.fit(text);
 
-    println!("Token IDs for 'hello world': {:?}", tokenizer.encode("hello world"));
-    println!("Decoded back: {}", tokenizer.decode(&tokenizer.encode("hello world")));
+    let text = fs::read_to_string("data/training.txt")
+        .expect("Failed to read training file");
+    
+    let mut tokenizer = BpeTokenizer::new(100);
+    tokenizer.fit(&text);
+
+    let tokens = tokenizer.encode(&text);
+    save_vocab(&tokenizer, "vocab.json");
+    save_tokenized_text(&tokens, "tokens.json");
+
+    println!("Saved vocab.json and tokens.json");
 }
