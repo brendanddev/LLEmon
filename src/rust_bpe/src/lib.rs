@@ -31,7 +31,36 @@ impl BpeTokenizer {
         }
     }
 
-    pub fn fit() { }
+    /// Train the BPE tokenizer on the input text
+    pub fn fit() {
+        // Build initial vocab from words with end of word token
+        let mut vocab: HashMap<String, usize> = HashMap::new();
+        for word in text.split_whitespace() {
+            let chars_with_end: Vec<String> = word.chars().map(|c| c.to_string()).chain(std::iter::once("</w>".to_string())).collect();
+            let key = chars_with_end.join(" ");
+            *vocab.entry(key).or_insert(0) += 1;
+        }
+
+        // Perform BPE merges
+        for _ in 0..self.num_merges {
+            let pairs = Self::get_stats(&vocab);
+            if pairs.is_empty() {
+                break;
+            }
+            let best = pairs.iter().max_by_key(|(_, count)| *count).unwrap().0.clone();
+            vocab = Self::merge_vocab(best.clone(), &vocab);
+            self.merges.push(best);
+        }
+
+        // Extract final token set
+        let mut vocab_set: HashSet<String> = HashSet::new();
+        for word in vocab.keys() {
+            for token in word.split_whitespace() {
+                vocab_set.insert(token.to_string());
+            }
+        }
+    }
+
 
     pub fn get_stats() { }
     
