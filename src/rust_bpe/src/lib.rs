@@ -22,7 +22,6 @@ pub struct BpeTokenizer {
 }
 
 impl BpeTokenizer {
-
     // Constructs a new BpeTokenizer instance
     pub fn new(num_merges: usize) -> Self {
         BpeTokenizer {
@@ -36,25 +35,29 @@ impl BpeTokenizer {
     /// Train the BPE tokenizer on the input text
     pub fn fit(&mut self, text: &str) {
         // Build initial vocab from words with end of word token
+        // Each character becomes a token intially, with a special </w> token to mark word boundaries
         let mut vocab: HashMap<String, usize> = HashMap::new();
         for word in text.split_whitespace() {
             let chars_with_end: Vec<String> = word.chars().map(|c| c.to_string()).chain(std::iter::once("</w>".to_string())).collect();
+            // Store as space-separated string for easy merging and count word frequency
             let key = chars_with_end.join(" ");
             *vocab.entry(key).or_insert(0) += 1;
         }
 
         // Perform BPE merges
         for _ in 0..self.num_merges {
+            // Count adjacent pairs
             let pairs = Self::get_stats(&vocab);
             if pairs.is_empty() {
                 break;
             }
+            // Find most frequent pair
             let best = pairs.iter().max_by_key(|(_, count)| *count).unwrap().0.clone();
             vocab = Self::merge_vocab(best.clone(), &vocab);
             self.merges.push(best);
         }
 
-        // Extract final token set
+        // Collect final unique tokens
         let mut vocab_set: HashSet<String> = HashSet::new();
         for word in vocab.keys() {
             for token in word.split_whitespace() {
@@ -83,9 +86,12 @@ impl BpeTokenizer {
     /// Performs one merge operation on the vocabulary
     fn merge_vocab(pair: (String, String), vocab: &HashMap<String, usize>) -> HashMap<String, usize> {
         let mut new_vocab: HashMap<String, usize> = HashMap::new();
+        
+        // Regex to safely replace the pair
         let pattern = Regex::new(&format!(r"(?<!\S){}\s{}(?!\S)", regex::escape(&pair.0), regex::escape(&pair.1))).unwrap();
 
         for (word, freq) in vocab {
+            // Replace all instances of the pair with the merged token
             let new_word = pattern.replace_all(word, format!("{}{}", pair.0, pair.1)).to_string();
             new_vocab.insert(new_word, *freq);
         }
@@ -94,6 +100,7 @@ impl BpeTokenizer {
 
     /// Tokenize a single word into subword using learned merges
     pub fn tokenize(&self, word: &str) -> Vec<String> {
+        // Start with characters plus end of word token
         let mut chars: Vec<String> = word.chars().map(|c| c.to_string()).collect();
         chars.push("</w>".to_string());
         let mut i = 0;
@@ -101,6 +108,7 @@ impl BpeTokenizer {
         while i < chars.len() - 1 {
             let pair = (chars[i].clone(), chars[i + 1].clone());
             if self.merges.contains(&pair) {
+                // Merge the pair into a single token
                 chars.splice(i..=i+1, std::iter::once(format!("{}{}", pair.0, pair.1)));
             } else {
                 i += 1;
@@ -118,7 +126,7 @@ impl BpeTokenizer {
         for word in text.split_whitespace() {
             let subwords = self.tokenize(word);
             for sw in subwords {
-                // Default to 0 if token not found
+                // Map subword to its ID, defaulting to 0 if not found
                 tokens.push(*self.token2id.get(&sw).unwrap_or(&0));
             }
         }
@@ -126,7 +134,7 @@ impl BpeTokenizer {
     }
 
     /// Decode a sequence of token IDs back into a string
-    pub fn decode(&self, ids: Vec<usize>) -> String {
+    pub fn decode(&self, ids: &[usize]) -> String {
         ids.iter()
             .map(|id| self.id2token.get(id).unwrap_or(&"<unk>".to_string()).clone())
             .collect::<Vec<String>>()
@@ -135,8 +143,6 @@ impl BpeTokenizer {
             .trim()
             .to_string()
     }
-
-
 
 
 }
