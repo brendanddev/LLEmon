@@ -14,6 +14,10 @@ trainingv2.txt
 # Rust build files
 src/rust_bpe/target/
 
+# Token and vocab files
+vocab.json
+tokens.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
