@@ -101,7 +101,7 @@ impl BpeTokenizer {
         while i < chars.len() - 1 {
             let pair = (chars[i].clone(), chars[i + 1].clone());
             if self.merges.contains(&pair) {
-                chars.splice(i..=i+1, [format!("{}{}", pair.0, pair.1)]);
+                chars.splice(i..=i+1, std::iter::once(format!("{}{}", pair.0, pair.1)));
             } else {
                 i += 1;
             }
