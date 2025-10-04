@@ -59,8 +59,12 @@ impl BpeTokenizer {
                 vocab_set.insert(token.to_string());
             }
         }
-    }
 
+        // Assign token IDs
+        self.token2id = vocab_set.iter().enumerate().map(|(i, tok)| (tok.clone(), i)).collect();
+        self.id2token = self.token2id.iter().map(|(k, &v)| (v, k.clone())).collect();
+    }
+    
 
     pub fn get_stats() { }
     
