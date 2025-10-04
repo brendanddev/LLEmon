@@ -86,13 +86,23 @@ impl BpeTokenizer {
     /// Performs one merge operation on the vocabulary
     fn merge_vocab(pair: (String, String), vocab: &HashMap<String, usize>) -> HashMap<String, usize> {
         let mut new_vocab: HashMap<String, usize> = HashMap::new();
-        
-        // Regex to safely replace the pair
-        let pattern = Regex::new(&format!(r"(?<!\S){}\s{}(?!\S)", regex::escape(&pair.0), regex::escape(&pair.1))).unwrap();
 
         for (word, freq) in vocab {
-            // Replace all instances of the pair with the merged token
-            let new_word = pattern.replace_all(word, format!("{}{}", pair.0, pair.1)).to_string();
+            // Split the word into tokens seperated by space
+            let mut tokens: Vec<String> = word.split_whitespace().map(|s| s.to_string()).collect();
+            let mut i = 0;
+
+            // Merge adjacent pairs matching 'pair'
+            while i < tokens.len() - 1 {
+                if tokens[i] == pair.0 && tokens[i + 1] == pair.1 {
+                    tokens.splice(i..=i+1, [format!("{}{}", pair.0, pair.1)]);
+                } else {
+                    i += 1;
+                }
+            }
+
+            // Join tokens back into a space seperated string
+            let new_word = tokens.join(" ");
             new_vocab.insert(new_word, *freq);
         }
         new_vocab
