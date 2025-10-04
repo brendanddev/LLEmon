@@ -42,3 +42,10 @@ impl BpeTokenizer {
         self.inner.token2id.len()
     }
 }
+
+/// Module initialization
+#[pymodule]
+fn rust_bpe_tokenizer(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_class::<BpeTokenizer>()?;
+    Ok(())
+}
