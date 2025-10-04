@@ -13,6 +13,7 @@ trainingv2.txt
 
 # Rust build files
 src/rust_bpe_tokenizer/target/
+src/rust_bpe_tokenizer/python/target/
 
 # Token and vocab files
 vocab.json
