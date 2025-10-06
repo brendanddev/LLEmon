@@ -6,26 +6,6 @@ A personal project where I'm experimenting with building a **basic Transformer-b
 
 ## Features
 
-- **Character-level tokenization**: Simple tokenizer that splits text into individual characters.
-- **Transformer architecture**: Implemented from scratch using PyTorch, including multi-head attention, feedforward networks, and positional encoding.
-- **Training loop**: Custom training loop with saving and loading model checkpoints.
-- **Sampling**: Basic text generation from a trained model.
-- **Data handling**: Utilities for loading and batching text data.
 ---
 
 ## Project Structure
-
-```
-LLEmon/
-├── checkpoints/
-├── data/
-│ └── training.txt
-├── src/
-│ ├── main.py
-│ ├── train.py
-│ ├── sample.py
-│ ├── models/
-│ ├── tokenizer/
-│ └── utils/
-└── README.md
-```
