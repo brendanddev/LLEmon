@@ -8,6 +8,7 @@ Generates text samples from a trained Transformer model.
 import torch
 from models.transformer import Transformer
 from tokenizer.bpetokenizer import BPETokenizer
+import rust_bpe_tokenizer as rbt
 
 def generate(model, tokenizer, prompt="Hello", length=100, device="cpu"):
     model.eval()
