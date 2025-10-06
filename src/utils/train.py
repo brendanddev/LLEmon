@@ -24,10 +24,10 @@ def get_batch(data, block_size, batch_size, tokenizer, device):
     return x.to(device), y.to(device)
 
 def train():
-    data_path = "data/training.txt"
-    block_size = 64
-    batch_size = 16
-    epochs = 1000
+    data_path = "data/trainingv2.txt"
+    block_size = 128
+    batch_size = 32
+    epochs = 10000
     lr = 3e-4
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
@@ -38,7 +38,7 @@ def train():
     print(f"Vocab size: {vocab_size}")
     
     # Initialize the Transformer model
-    model = Transformer(vocab_size=vocab_size, d_model=128, num_layers=2, heads=4, ff_hidden_dim=256)
+    model = Transformer(vocab_size=vocab_size, d_model=256, num_layers=4, heads=8, ff_hidden_dim=512)
     model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     criterion = nn.CrossEntropyLoss()

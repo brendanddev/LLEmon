@@ -25,7 +25,7 @@ def sample(model, tokenizer, start_text="h", length=100, device="cpu"):
 
 def main():
     # Load training data to build tokenizer
-    data_path = "data/training.txt"
+    data_path = "data/trainingv2.txt"
     with open(data_path, "r", encoding="utf-8") as f:
         text = f.read()
 
@@ -35,12 +35,12 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # Load trained model
-    model = Transformer(vocab_size=vocab_size, d_model=128, num_layers=2, heads=4, ff_hidden_dim=256)
+    model = Transformer(vocab_size=vocab_size, d_model=256, num_layers=4, heads=8, ff_hidden_dim=512)
     model.load_state_dict(torch.load("checkpoints/transformer.pt", map_location=device))
     model.to(device)
 
     # Generate text
-    result = sample(model, tokenizer, start_text="Hello wor", length=200, device=device)
+    result = sample(model, tokenizer, start_text="Hello ", length=200, device=device)
     print("\nGenerated text:\n", result)
 
 
