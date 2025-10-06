@@ -41,11 +41,30 @@ impl BpeTokenizer {
     pub fn get_vocab_size(&self) -> usize {
         self.inner.token2id.len()
     }
+
+    /// Get the number of merges used
+    pub fn get_num_merges(&self) -> usize {
+        self.inner.num_merges
+    }
+}
+
+/// Save the learned vocabulary to a JSON file
+#[pyfunction]
+pub fn save_vocab(tokenizer: &BpeTokenizer, path: &str) {
+    ::rust_bpe_tokenizer::save_vocab(&tokenizer.inner, path);
+}
+
+/// Save tokenized text (list of token IDs) to a JSON file
+#[pyfunction]
+pub fn save_tokenized_text(tokens: Vec<usize>, path: &str) {
+    ::rust_bpe_tokenizer::save_tokenized_text(&tokens, path);
 }
 
 /// Module initialization
 #[pymodule]
 fn rust_bpe_tokenizer(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<BpeTokenizer>()?;
+    m.add_function(wrap_pyfunction!(save_vocab, m)?)?;
+    m.add_function(wrap_pyfunction!(save_tokenized_text, m)?)?;
     Ok(())
 }
