@@ -10,7 +10,7 @@ import torch.nn as nn
 from .attention import Attention
 from .feedforward import FeedForward
 
-class TransformerBlock:
+class TransformerBlock(nn.Module):
     
     def __init__(self, d_model, heads, ff_hidden_dim):
         super().__init__()
