@@ -3,6 +3,8 @@
 sample.py
 
 Generates text from a trained Transformer model.
+
+Run: python -m src.utils.sample
 """
 
 import torch
