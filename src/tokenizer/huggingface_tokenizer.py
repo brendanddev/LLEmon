@@ -27,9 +27,12 @@ class HuggingFaceTokenizer:
         self.tokenizer.train(files=files, trainer=trainer)
         self.vocab_size = self.tokenizer.get_vocab_size()
         
-        
+    # Encodes text into a list of token IDs
     def encode(self, text):
-        pass
+        return self.tokenizer.encode(text).ids
     
+    # Decodes a list of token IDs back into text
     def decode(self, tokens):
-        pass
+        return self.tokenizer.decode(tokens)
+    
+    
