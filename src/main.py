@@ -8,7 +8,6 @@ Brendan Dileo, August 2025
 
 import torch
 from tokenizer.chartokenizer import CharTokenizer
-from models.transformerblock import TransformerBlock
 from models.transformer import Transformer
 
 def main():
