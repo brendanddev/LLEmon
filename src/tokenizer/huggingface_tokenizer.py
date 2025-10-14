@@ -35,4 +35,6 @@ class HuggingFaceTokenizer:
     def decode(self, tokens):
         return self.tokenizer.decode(tokens)
     
-    
+    # Saves the tokenizer to a file
+    def save(self, path="tokenizer.json"):
+        self.tokenizer.save(path)
