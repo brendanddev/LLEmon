@@ -10,6 +10,7 @@ checkpoints/
 training.txt
 trainingv1.txt
 trainingv2.txt
+data/processed/
 
 # Rust build files
 src/rust_bpe_tokenizer/target/
