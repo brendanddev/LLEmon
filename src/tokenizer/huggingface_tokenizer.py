@@ -5,11 +5,12 @@ huggingface_tokenizer.py
 """
 
 from tokenizers import Tokenizer, models, trainers, pre_tokenizers
+import os
 
 class HuggingFaceTokenizer:
 
     # Initializes the tokenizer, loading from vocab_path if provided
-    def __init__(self, vocab_path):
+    def __init__(self, vocab_path=None):
         if vocab_path:
             self.tokenizer = Tokenizer.from_file(vocab_path)
         else:
@@ -36,5 +37,9 @@ class HuggingFaceTokenizer:
         return self.tokenizer.decode(tokens)
     
     # Saves the tokenizer to a file
-    def save(self, path="tokenizer.json"):
+    def save(self, path):
+        directory = os.path.dirname(path)
+        if directory:
+            os.makedirs(directory, exist_ok=True)
         self.tokenizer.save(path)
+        self.vocab_path = path
