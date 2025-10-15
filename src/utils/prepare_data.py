@@ -22,6 +22,14 @@ def prep_data():
     token_ids = tokenizer.encode(text)
     print(f"Tokenized {len(token_ids)} tokens.")
     print("First 100 IDs:", token_ids[:100])
+    
+    # Convert to PyTorch tensor
+    data = torch.tensor(token_ids, dtype=torch.long)
+    os.makedirs("data/processed", exist_ok=True)
+    
+    # Save tensor to file
+    torch.save(data, "data/processed/train_tokens.pt")
+    print("Saved tokenized data to data/processed/train_tokens.pt")
 
 if __name__ == "__main__":
     prep_data()
