@@ -11,7 +11,7 @@ def main():
     tokenizer = HuggingFaceTokenizer()
     
     # Train tokenizer on text and save
-    tokenizer.train("data/training.txt", vocab_size=30000)
+    tokenizer.train(files=["data/training.txt"], vocab_size=30000)
     tokenizer.save("models/hf_tokenizer.json")
     
     # Reload tokenizer and test
