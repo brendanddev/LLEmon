@@ -18,6 +18,7 @@ src/rust_bpe_tokenizer/python/target/
 # Token and vocab files
 vocab.json
 tokens.json
+hf_tokenizer.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
