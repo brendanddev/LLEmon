@@ -2,6 +2,8 @@
 """ 
 huggingface_tokenizer.py
 
+A lightweight wrapper around Hugging Face's tokenizers library for training, saving, loading, 
+and using a BPE tokenizer.
 """
 
 from tokenizers import Tokenizer, models, trainers, pre_tokenizers

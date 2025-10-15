@@ -2,6 +2,7 @@
 """ 
 hf_tokenize.py
 
+A utility script for training and testing the Hugging Face BPE tokenizer.
 """
 
 from src.tokenizer.huggingface_tokenizer import HuggingFaceTokenizer
