@@ -9,6 +9,7 @@ Run: python -m src.utils.train
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from src.tokenizer.chartokenizer import CharTokenizer
 from src.tokenizer.huggingface_tokenizer import HuggingFaceTokenizer
 from src.models.transformer import Transformer
 
@@ -24,11 +25,13 @@ def get_batch(data, block_size, batch_size, device):
     return x.to(device), y.to(device)
 
 def train():
+    
+    # Training parameters
     tokenizer_path = "models/hf_tokenizer.json"
     data_path = "data/processed/train_tokens.pt"
     block_size = 128
     batch_size = 32
-    epochs = 1000
+    epochs = 2500
     lr = 3e-4
     device = "cuda" if torch.cuda.is_available() else "cpu"
    
